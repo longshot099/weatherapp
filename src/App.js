@@ -1,5 +1,11 @@
 import React,{useEffect,useState, useRef} from 'react';
 import './App.css';
+import Search from './components/Search'
+import Time from './components/Time'
+import City from './components/City'
+import WeatherDes from './components/WeatherDes'
+import WeatherTemp from './components/WeatherTemp'
+
 // rain,clouds,clear,drizzle
 //let api_url = `api.openweathermap.org/data/2.5/weather?q=san francisco &units=metric&APPID=${APP_KEY}`;
 //http://api.timezonedb.com/v2.1/get-time-zone?key=${TIME_KEY}&format=json&by=position&lat=${lat}&lng=${lon}
@@ -49,7 +55,8 @@ function App() {
     var calendarDate = new Date(date).getDate();
     return isNaN(calendarDate)? null : calendarDate;
   }
-  const search = ()=>{
+  const search = async ()=>{
+    inputRef.current.value = '';
     if(city == '') return;
     let api_url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&APPID=${APP_KEY}`;
     fetch(api_url)
@@ -92,7 +99,8 @@ function App() {
                 weatherimg.current.className = 'clear';
               
               else weatherimg.current.className = 'drizzle';
-        }
+          }
+        
       })
       
   }
@@ -100,21 +108,11 @@ function App() {
     <div className="App">
       <div ref = {weatherimg} className = ''>
             <div id = 'info'>
-              <div id= 'form'>
-                <input onChange = {e => setCity(e.target.value)} ref = {inputRef}type = 'text' placeholder = 'Enter City Here...'/>
-                <button id = 'searchBtn' onClick = {search}>Search</button>
-              </div>
-
-              <div id = "time">
-                <h1 ref = {timeRef}></h1>
-              </div>
-
-              <h2 ref = {cityNameRef}></h2>
-
-              <div className = 'weather'>
-                <h3 ref = {weatherDescRef} id = 'weather-description'></h3>
-                <h3 ref = {tempRef} id = 'temp'></h3>
-              </div>
+              <Search placeholder = 'Enter City Here...' onChange = {e => setCity(e.target.value)} ref = {inputRef} onClick = {search}/>
+              <Time ref = {timeRef}/>
+              <City ref = {cityNameRef}/>
+              <WeatherDes ref = {weatherDescRef}/>
+              <WeatherTemp ref ={tempRef}/>
             </div>
       </div>
     </div> 
